@@ -13,13 +13,14 @@ enum RecipeServiceError: Error {
 }
 
 struct RecipeService {
+    static var urlSession = URLSession.shared
     static let baseURL = "https://www.themealdb.com/api/json/v1/1/"
 
     static func searchRecipes(query: String) async throws -> [Meal] {
         guard let url = URL(string: baseURL + "search.php?s=\(query)") else {
             throw RecipeServiceError.badURL
         }
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, _) = try await self.urlSession.data(from: url)
 //        if let jsonString = String(data: data, encoding: .utf8) {
 //               print("📄 Raw JSON:\n\(jsonString)")
 //           }
@@ -72,9 +73,14 @@ struct Meal: Codable, Identifiable {
             let ingredientKey = DynamicCodingKeys(stringValue: "strIngredient\(i)")
             let measureKey = DynamicCodingKeys(stringValue: "strMeasure\(i)")
 
-            if let ingredient = try container.decodeIfPresent(String.self, forKey: ingredientKey),
-               let measure = try container.decodeIfPresent(String.self, forKey: measureKey),
-               !ingredient.trimmingCharacters(in: .whitespaces).isEmpty {
+            guard let ingredient = try container.decodeIfPresent(String.self, forKey: ingredientKey),
+                  !ingredient.trimmingCharacters(in: .whitespaces).isEmpty else {
+                continue
+            }
+
+            // Only add the ingredient if the measure is also present and not empty
+            if let measure = try container.decodeIfPresent(String.self, forKey: measureKey),
+               !measure.trimmingCharacters(in: .whitespaces).isEmpty {
                 tempIngredients.append("\(ingredient) (\(measure))")
             }
         }

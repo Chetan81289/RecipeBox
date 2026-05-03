@@ -9,7 +9,7 @@
         <attribute name="id" attributeType="UUID" defaultValueString="00000000-0000-0000-0000-000000000000" usesScalarValueType="NO"/>
         <attribute name="imageURL" optional="YES" attributeType="URI"/>
         <attribute name="instructions" optional="YES" attributeType="String"/>
-        <attribute name="name" attributeType="String" defaultValueString="&quot;Untitled&quot;"/>
+        <attribute name="name" attributeType="String" defaultValueString="Untitled"/>
         <attribute name="sourceURL" optional="YES" attributeType="URI"/>
         <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RecipeCategory" inverseName="recipes" inverseEntity="RecipeCategory"/>
         <relationship name="ingredients" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Ingredient" inverseName="recipe" inverseEntity="Ingredient"/>
