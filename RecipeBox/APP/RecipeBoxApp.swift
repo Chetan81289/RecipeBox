@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import CoreData
 
 @main
 struct RecipeBoxApp: App {
@@ -15,7 +14,7 @@ struct RecipeBoxApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.managedObjectContext, persistenceController.viewContext)
         }
     }
 }
